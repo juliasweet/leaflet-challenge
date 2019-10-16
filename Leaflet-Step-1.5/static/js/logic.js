@@ -7,8 +7,8 @@ d3.json(queryUrl, function(data) {
     createFeatures(data.features);
 });
 
-function createFeatures(earthquakeData) {
 
+function createFeatures(earthquakeData) {
     // Define a function we want to run once for each feature in the features array
     // Give each feature a popup describing the place and time of the earthquake
     function onEachFeature(feature, layer) {
@@ -100,4 +100,19 @@ function createMap(earthquakes) {
     L.control.layers(baseMaps, overlayMaps, {
         collapsed: false
     }).addTo(myMap);
+
+    var legend = L.control({ position: 'bottomright' });
+    legend.onAdd = function() {
+        var div = L.DomUtil.create('div', 'info legend');
+        mags = [0, 2, 3, 4];
+        colors = ["blue", "yellow", "orange", "red"];
+        for (var i = 0; i < mags.length; i++) {
+            div.innerHTML +=
+                '<i style="background:' + colors[i] + '"></i> ' +
+                mags[i] + (mags[i + 1] ? '&ndash;' + mags[i + 1] + '<br>' : '+');
+        }
+
+        return div;
+    }
+    legend.addTo(myMap);
 }
